@@ -79,28 +79,35 @@ class HomeScreen extends StatelessWidget {
             return ListView.builder(
                 itemCount: state.tasks.length,
                 itemBuilder: ((context, index) {
-                  return ListTile(
-                    enabled: state.tasks[index].isDone ? false : true,
-                    leading: Checkbox(
-                        value: state.tasks[index].isDone,
-                        onChanged: (val) {
-                          BlocProvider.of<TasksblocBloc>(context)
-                              .add(MarkAsDoneEvent(task: state.tasks[index]));
-                          BlocProvider.of<TasksblocBloc>(context)
-                              .add(GetTasksEvent());
-                        }),
-                    title: Text(
-                      state.tasks[index].title,
-                      style: state.tasks[index].isDone
-                          ? kcompletedTextStyle
-                          : null,
-                    ),
-                    subtitle: Text(
-                      state.tasks[index].note,
-                      style: state.tasks[index].isDone
-                          ? kcompletedTextStyle
-                          : null,
-                    ),
+                  return BlocBuilder<TasksblocBloc, TasksblocState>(
+                    builder: (context, state) {
+                      if (state is LoadedState) {
+                        return ListTile(
+                          enabled: state.tasks[index].isDone ? false : true,
+                          leading: Checkbox(
+                              value: state.tasks[index].isDone,
+                              onChanged: (val) {
+                                BlocProvider.of<TasksblocBloc>(context).add(
+                                    MarkAsDoneEvent(task: state.tasks[index]));
+                                BlocProvider.of<TasksblocBloc>(context)
+                                    .add(GetTasksEvent());
+                              }),
+                          title: Text(
+                            state.tasks[index].title,
+                            style: state.tasks[index].isDone
+                                ? kcompletedTextStyle
+                                : null,
+                          ),
+                          subtitle: Text(
+                            state.tasks[index].note,
+                            style: state.tasks[index].isDone
+                                ? kcompletedTextStyle
+                                : null,
+                          ),
+                        );
+                      }
+                      return const Placeholder();
+                    },
                   );
                 }));
           }

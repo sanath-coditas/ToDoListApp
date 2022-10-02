@@ -28,9 +28,9 @@ class TaskModel extends Task {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'id': modelId,
-      'title': modelTitle,
-      'note': modelNote,
+      'id': modelId.toString(),
+      'title': modelTitle.toString(),
+      'note': modelNote.toString(),
       'isDone': modelIsDone,
     };
     return map;
